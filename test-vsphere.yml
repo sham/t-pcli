@@ -2,7 +2,7 @@ resources:
 - name: test-ps
   type: git
   source:
-    uri: https://github.com/sham/test-powerclicore.git
+    uri: https://github.com/sham/t-pcli.git
     branch: master
 
 jobs:
