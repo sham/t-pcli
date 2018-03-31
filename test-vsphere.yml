@@ -1,0 +1,51 @@
+resources:
+- name: test-ps
+  type: git
+  source:
+    uri: https://github.com/sham/test-powerclicore.git
+    branch: master
+
+jobs:
+  - name: hello-world
+    plan:
+    - get: test-ps
+    - task: run
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: 192.168.222.130:5000/ps
+            tag: "latest"
+            insecure_registries: [ "192.168.222.130:5000" ]
+        run:
+          path: /usr/bin/pwsh
+          args: ["-c", "write-host","hello from powershell fly linux"]
+  
+    - task: run2
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: 192.168.222.130:5000/powercli
+            tag: "latest"
+            insecure_registries: [ "192.168.222.130:5000" ]
+        run:
+          path: /bin/pwsh
+          args: ["-c", "write-host hello"]
+
+    - task: run3
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: 192.168.222.130:5000/powercli
+            tag: "latest"
+            insecure_registries: [ "192.168.222.130:5000" ]
+        inputs:
+          - name: test-ps
+        run:
+          path: /bin/pwsh
+          args: [test-ps/test.ps1]
